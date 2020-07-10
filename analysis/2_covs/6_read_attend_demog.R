@@ -44,8 +44,10 @@ system.time(attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses, ])
 # clean the names of the data and select just the demographic chracteristics that we need
 names(attend_dat) <- tolower(names(attend_dat))
 
+names(attend_dat)
+
 attend_dat <- attend_dat %>%
-  select(id2, id1, district, sex, ethnic, disability_flag, campus, bil_esl_attend, gifted_attend, se_attend, lep_attend, title1_flag)
+  select(id2, id1, district, sex, ethnic, disability_flag, campus, bil_esl_attend, gifted_attend, se_attend, lep_attend, title1_flag, econ_attend)
 
 # dummy code sex and ethnicity
 attend_dat_dum <- dummy_cols(attend_dat, select_columns = c('sex', 'ethnic'))
