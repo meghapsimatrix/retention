@@ -38,10 +38,6 @@ sbec_dat <- sbec_dat_full %>%
 
 nrow(sbec_dat)
 
-# HB = Eliminate certification by exam, which is only available for teachers who 
-# already have a teaching certificate in Texas and wish to receive a new certificate
-# in a different area
-
 
 # check tables
 table(sbec_dat$cert_type_cd)
@@ -93,6 +89,8 @@ table(sbec_dat_no_dup$cert_type_cd)
 
 sbec_cohort <- sbec_dat_no_dup 
 
+
+# cleaned IHE outside ERC so taking out IHE and then going to join it below
 sbec_cohort <- sbec_cohort %>%
   select(-IHE)
 
