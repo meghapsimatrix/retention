@@ -21,27 +21,27 @@ cohort_cert <- left_join(sbec_cohort, cert_dat, by = "id2")  %>% # join the clea
   ungroup()
 
 
+# Duplicates --------------------------------------------------------------
 
 # checking duplicates 
 cohort_cert %>%
   ungroup() %>%
   filter(duplicated(id2) | duplicated(id2, fromLast = TRUE)) %>% #in the data filter any that are duplicated id2 and show me all the duplicated values
   arrange(id2, admin_dt) %>%
-  select(id2, admin_dt, cert_field, grade_level_cd, test_descr, test_type_cd, scorenum) %>%
   View()
 
-# 
-# cohort_cert <- cohort_cert %>%
-#   ungroup() %>%
-#   distinct(id2, .keep_all = TRUE)
-# 
+# no duplicates 
 
  
 
-no_ped <- anti_join(sbec_cohort, cohort_cert, by = "id2")
-check_noped <- semi_join(cert_dat, no_ped, by = "id2")
+# Check those without pedagogy --------------------------------------------
+
+no_pedag <- anti_join(sbec_cohort, cohort_cert, by = "id2")
+check_nopedag <- semi_join(cert_dat, no_ped, by = "id2")
 
 
+
+# Save --------------------------------------------------------------------
 
 names(cohort_cert)
 
