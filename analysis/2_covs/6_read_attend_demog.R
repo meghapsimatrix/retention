@@ -70,10 +70,15 @@ files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.nam
 # go through each files and read in the data and select particular columns
 read_dat <- function(path, type, cohort_dat){
   
+  campus_dat <- cohort_dat %>%
+    select(CAMPUS) %>%
+    distinct(., .keep_all = TRUE)
+  
   dm <- detect_dm_csv(path, sep = type, header = TRUE)
   dat <- laf_open(dm, skip = 1)
+  dm$columns <- "string"
   
-  attend_dat <- dat[dat$CAMPUS %in% cohort_dat$CAMPUS, ]
+  attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campus_dat$CAMPUS, ]
   
   names(attend_dat) <- tolower(names(attend_dat))
   
@@ -89,8 +94,22 @@ read_dat <- function(path, type, cohort_dat){
   
 }
 
+
+# cohort_dat 
+
+camp_dat <- cohort_dat_ec %>%
+  select(year, CAMPUS) %>%
+  distinct(., .keep_all = TRUE) %>%
+  group_by(year) %>%
+  nest(cohort_data = CAMPUS)
+
+
+files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)
+
+
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c(",", rep("\t", 9))) # need to check 
+params <- tibble(path = files, type = rep(",", 10)) # need to check 
+
 
 
 # for each file read in the data, create a big data frame of all the datasets together
