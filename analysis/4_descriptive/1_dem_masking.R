@@ -8,10 +8,10 @@ load("Revised Datasets/R/cohort_cert.RData")
 
 # Gender ------------------------------------------------------------------
 
-get_mask <- function(dat = sbec_cohort, var){
+get_masked_pct <- function(dat, group, var){
 
   dat %>%
-    group_by(cert_pgm_cd) %>%
+    group_by({{group}}) %>%
     summarize(N = n(),
               pct_var = pct_fct({{var}})
     ) %>%
@@ -20,13 +20,13 @@ get_mask <- function(dat = sbec_cohort, var){
 }
 
 
-get_mask(gender)
+get_masked_pct(gender)
 
 
 # if that doesn't work do the following - there might be issue with version of dplyr but just wanted to check if we can run functions
 
-sbec_cohort %>%
-  group_by(cert_pgm_cd) %>%
+cohort_cert %>%
+  group_by(trad) %>%
   summarize(N = n(),
             gender = pct_fct(gender)
   ) %>%
