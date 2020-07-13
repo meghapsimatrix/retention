@@ -1,17 +1,27 @@
+library(dplyr)
+library(tidyr)
+
 
 mask_counts <- function(tb) {
   N <- sum(tb)
   masked_cells <- tb < 5 | (N - tb) < 3
   res <- as.character(tb)
   names(res) <- names(tb)
-  res[tb < 5] <- "<5"
-  res[tb > N - 3] <- paste0(">", N - 3)
+  
+  # If total is <=7, just censor everything with a *
+  if(N > 7) {
+    res[tb > N - 3] <- paste0(">", N - 3)
+    res[tb < 5] <- "<5"
+  } else {
+    res[tb > N - 3 | tb < 5] <- "*"
+  }
   
   # complementary cell suppression
   
-  if (sum(masked_cells) > 0 & sum(tb[masked_cells]) < 5) {
-    cs <- which.min(tb[!masked_cells])
-    res[!masked_cells][cs] <- paste0("<=", tb[cs] + sum(tb[masked_cells]))
+  if (sum(masked_cells) > 0 & sum(masked_cells) < length(masked_cells) & sum(tb[masked_cells]) < 5) {
+    cs <- which(tb == min(tb[!masked_cells]))
+    # Surplus count gets distributed across any cells with minimum number
+    res[cs] <- paste0("<=", tb[cs] + ceiling(sum(tb[masked_cells])/ length(cs)))
   }
   
   res
@@ -50,7 +60,7 @@ mask_pct <- function(pct, N, thresholds = NULL) {
     
     if (sum(masked_cells) > 0 & sum(pct[masked_cells]) < thresholds$low[r]) {
       cs <- which.min(pct[!masked_cells])
-      res[!masked_cells][cs] <- paste0("<=", as.character(round(100 * (pct[cs] + sum(pct[masked_cells])))), "%")
+      res[!masked_cells][cs] <- paste0("<=", as.character(round(100 * (pct[!masked_cells][cs] + sum(pct[masked_cells])))), "%")
     }
   }
   names(res) <- names(pct)
