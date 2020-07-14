@@ -39,6 +39,3 @@ employ_dat <- employ_dat %>%
 
 save(employ_dat, file =  "Revised Datasets/R/employ_dat.RData")
 
-
-# check year
-load("Revised Datasets/R/employ_dat.RData")

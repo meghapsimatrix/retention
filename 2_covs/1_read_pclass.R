@@ -20,7 +20,7 @@ read_dat <- function(path, type){
 }
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c(rep(",", 11), rep("\t", 9)))
+params <- tibble(path = files, type = c(",", rep("\t", 9)))
 
 
 # for each file read in the data, create a big data frame of all the datasets together
@@ -34,8 +34,7 @@ class_dat <- params %>%  # take the params file (with path and type)
 #class_dat1 <- map_df(files[1:11], read_csv)
 
 class_dat <- class_dat %>%
-  mutate(year = parse_number(path)) %>% # extract the year from the path
-  filter(year > 8) # just keep years 09-19
+  mutate(year = parse_number(path)) # extract the year from the path
 
 names(class_dat)
 

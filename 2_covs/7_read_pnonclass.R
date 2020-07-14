@@ -20,23 +20,18 @@ read_dat <- function(path, type){
 }
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c(rep(",", 11), rep("\t", 9)))
+params <- tibble(path = files, type = c(",", rep("\t", 9)))
 
 
 # for each file read in the data, create a big data frame of all the datasets together
-class_dat <- params %>%  # take the params file (with path and type)
+nonclass_dat <- params %>%
   mutate(
-    res = pmap(., .f = read_dat)  # for each line read the data with the right type, and then save it as a compressed data in a column called res
+    res = pmap(., .f = read_dat)
   ) %>%
-  unnest(cols = res)# the stuff above nests the datasets in to a row and this function unnests it so we have the full data; data from each year is stacked on top of another
+  unnest(cols = res)
 
 
-#class_dat1 <- map_df(files[1:11], read_csv)
+nonclass_dat <- nonclass_dat %>%
+  mutate(year = parse_number(path))
 
-class_dat <- class_dat %>%
-  mutate(year = parse_number(path)) %>% # extract the year from the path
-  filter(year > 8) # just keep years 09-19
-
-names(class_dat)
-
-save(class_dat, file = "Revised Datasets/R/class_dat.RData")
+save(employ_dat, file =  "Revised Datasets/R/nonclass_dat.RData")
