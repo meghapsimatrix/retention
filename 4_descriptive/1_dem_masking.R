@@ -20,7 +20,7 @@ get_masked_pct <- function(dat, group, var){
 }
 
 
-get_masked_pct(gender)
+get_masked_pct(dat = cohort_cert, group = trad, var = gender)
 
 
 # if that doesn't work do the following - there might be issue with version of dplyr but just wanted to check if we can run functions
