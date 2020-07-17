@@ -31,7 +31,7 @@ sbec_dat <- sbec_dat_full %>%
   group_by(id2) %>%
   filter(cert_effective_dt_clean == min(cert_effective_dt_clean)) %>%
   ungroup() %>%
-  filter(cert_type_cd %in% c("STD", "INT", "PRO", "PRX", "PRX2"),   # only keep where std and prob and int and keep where cert_pgm is not HB
+  filter(cert_type_cd %in% c("STD", "INT", "PRO"),   # only keep where std and prob and int and keep where cert_pgm is not HB
          cert_pgm_cd %in% c("ALT", "PB", "STD")) %>%
   filter(cert_year == 2009 | cert_year == 2010 & cert_month < 6)  # filter to the time frame
 
