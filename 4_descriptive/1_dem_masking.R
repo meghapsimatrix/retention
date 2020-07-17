@@ -21,13 +21,24 @@ get_masked_pct <- function(dat, group, var){
 
 
 get_masked_pct(dat = cohort_cert, group = trad, var = gender)
+get_masked_pct(dat = cohort_cert, group = trad, var = ethnicity)
 
 
 # if that doesn't work do the following - there might be issue with version of dplyr but just wanted to check if we can run functions
 
 cohort_cert %>%
+  mutate(gender = factor(gender)) %>%
   group_by(trad) %>%
   summarize(N = n(),
             gender = pct_fct(gender)
   ) %>%
   unnest(gender)
+
+
+cohort_cert %>%
+  mutate(ethnicity = factor(ethncity)) %>%
+  group_by(trad) %>%
+  summarize(N = n(),
+            ethnicity = pct_fct(ethnicity)
+  ) %>%
+  unnest(ethnicity)

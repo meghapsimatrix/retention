@@ -122,8 +122,8 @@ table(sbec_cohort$system)
 
 sbec_cohort <- sbec_cohort %>%
   filter(system != "Community College") %>% # dropping comm college
-  mutate(trad = if_else(IHE == 1 & cert_type_cd == "STD" & cert_pgm_cd %in% c("STD", "PB"), 1, 0),
-         trad = if_else(is.na(org_name), 1, trad))
+  mutate(IHE = if_else(is.na(org_name), 1, IHE),
+         trad = if_else(IHE == 1 & cert_type_cd == "STD" & cert_pgm_cd %in% c("STD", "PB"), 1, 0))
 
 table(sbec_cohort$trad)
 
