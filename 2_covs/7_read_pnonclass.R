@@ -1,6 +1,4 @@
 library(tidyverse)
-library(lubridate)
-library(purrr)
 
 # code for principal is 020
 
