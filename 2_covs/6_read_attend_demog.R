@@ -66,7 +66,7 @@ files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.nam
 
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = rep(",", 10)) # need to check 
+params <- tibble(path = files, type = rep(",", 10), cohort_dat = camp_dat$cohort_dat) # need to check 
 
 
 
