@@ -9,57 +9,6 @@ library(fastDummies)
 # load campus data  -------------------------------------------------------
 load("Revised Datasets/R/cohort_ec.RData")
 
-# get cohort - 2019 - only select the campus and keep only unique campuses
-campus_dat <- cohort_ec_dat %>%
-  filter(year == 19) %>%
-  select(CAMPUS) %>%
-  distinct(., .keep_all = TRUE)
-
-
-# read in one p_attend data -----------------------------------------------
-  
-path <- "NewFilesReleased/TEA/p_attend_demog19.txt"
-type <- ","
-
-
-# detect the data model
-dm <- detect_dm_csv(path, sep = type, header = TRUE)
-dm$columns <- "string"  # change all to string when reading it in
-
-dat <- laf_open(dm, skip = 1)
-
-head(dat)
-dm
-
-campuses <- campus_dat %>% pull(CAMPUS)
-str(campuses)
-campuses
-
-# conversion to initial failed
-
-# read in attend data where the campus matches campus in our cohort 
-system.time(attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses, ])
-
-
-# clean the names of the data and select just the demographic chracteristics that we need
-names(attend_dat) <- tolower(names(attend_dat))
-
-names(attend_dat)
-
-attend_dat <- attend_dat %>%
-  select(id2, id1, district, sex, ethnic, disability_flag, campus, bil_esl_attend, gifted_attend, se_attend, lep_attend, title1_flag, econ_attend)
-
-# dummy code sex and ethnicity
-attend_dat_dum <- dummy_cols(attend_dat, select_columns = c('sex', 'ethnic'))
-
-
-glimpse(attend_dat_dum)
-
-
-summary_dat <- attend_dat_dum %>%
-  group_by(CAMPUS) %>%
-  summarize_at(vars())
-
 
 # Read data ---------------------------------------------------------------
 
@@ -68,29 +17,38 @@ files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.nam
 # only keep 09-10 to 18-19
 
 # go through each files and read in the data and select particular columns
-read_dat <- function(path, type, cohort_dat){
+summarize_attend_dat <- function(path, type, campuses){
   
-  campus_dat <- cohort_dat %>%
-    select(CAMPUS) %>%
-    distinct(., .keep_all = TRUE)
-  
-  dm <- detect_dm_csv(path, sep = type, header = TRUE)
+  dm <- detect_dm_csv(path, sep = type, header = TRUE, row.names = NULL)
+  dm$columns[, "type"] <- "string"
   dat <- laf_open(dm, skip = 1)
-  dm$columns <- "string"
   
-  attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campus_dat$CAMPUS, ]
+  attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses, ]
   
   names(attend_dat) <- tolower(names(attend_dat))
   
-  attend_dat <- attend_dat %>%
-    select(id2, id1, district, sex, ethnic, disability_flag, campus, bil_esl_attend, gifted_attend, se_attend, lep_attend, title1_flag)
+  attend_dat_clean <- attend_dat %>%
+    mutate(economic = case_when(economic == "00" ~ "nd",
+                                economic == "01" ~ "free",
+                                economic == "02" ~ "reduced",
+                                economic == "99" ~ "other"))
   
-  attend_dat_dum <- dummy_cols(attend_dat, select_columns = c('sex', 'ethnic'))
+  
+  attend_dat_clean <- attend_dat_clean %>%
+    select(id2, id1, district, sex, ethnic, economic, 
+           campus_accnt, bil_esl_attend, gifted_attend, se_attend,
+           lep_attend, title1_flag)
+  
+  # dummy code sex and ethnicity
+  attend_dat_dum <- dummy_cols(attend_dat_clean, 
+                               select_columns = c('sex', 'ethnic', 'economic'))
   
   summary_dat <- attend_dat_dum %>%
-    group_by(campus)
+    group_by(campus_accnt) %>%
+    summarize_at(vars(sex_F:economic_other, bil_esl_attend:title1_flag), mean) %>%
+    ungroup()
   
-  return(attend_dat)
+  return(summary_dat)
   
 }
 
@@ -101,7 +59,7 @@ camp_dat <- cohort_dat_ec %>%
   select(year, CAMPUS) %>%
   distinct(., .keep_all = TRUE) %>%
   group_by(year) %>%
-  nest(cohort_data = CAMPUS)
+  nest(cohort_dat = CAMPUS)
 
 
 files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)
@@ -123,9 +81,7 @@ attend_dat <- params %>%  # take the params file (with path and type)
 #class_dat1 <- map_df(files[1:11], read_csv)
 
 attend_dat <- attend_dat %>%
-  mutate(year = parse_number(path)) %>% # extract the year from the path
-  filter(year > 8) # just keep years 09-19
+  mutate(year = parse_number(path)) 
 
-names(attend_dat)
 
 save(attend_dat, file = "Revised Datasets/R/cohort_final.RData")
