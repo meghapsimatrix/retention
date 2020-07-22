@@ -52,26 +52,32 @@ summarize_attend_dat <- function(path, type, campuses){
 
 
 # cohort_dat 
-camp_dat <- cohort_dat_ec %>%
+camp_dat <- cohort_ec_dat %>%
   select(year, CAMPUS) %>%
   distinct(., .keep_all = TRUE) %>%
+  filter(!is.na(year)) %>%
   group_by(year) %>%
-  nest(cohort_dat = CAMPUS)
+  nest(cohort_dat = CAMPUS) %>%
+  ungroup()
 
-files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)
+camp_dat
+
+dim(camp_dat)
+length(files)
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = rep(",", 10), cohort_dat = camp_dat$cohort_dat) # need to check 
+params <- tibble(path = files, type = rep(",", 10), cohort_dat = camp_dat$data) # need to check 
+params
 
 # for each file read in the data, create a big data frame of all the datasets together
 attend_dat <- params %>%  # take the params file (with path and type)
   mutate(
     res = pmap(., .f = summarize_attend_dat)  # for each line read the data with the right type, and then save it as a compressed data in a column called res
   ) %>%
-  unnest(cols = res)# the stuff above nests the datasets in to a row and this function unnests it so we have the full data; data from each year is stacked on top of another
+  unnest(cols = res)# the stuff above nests the datasets in to a row and this 
+ #function unnests it so we have the full data; 
+ #data from each year is stacked on top of another
 
-
-#class_dat1 <- map_df(files[1:11], read_csv)
 
 attend_dat <- attend_dat %>%
   mutate(year = parse_number(path)) 
