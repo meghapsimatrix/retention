@@ -49,7 +49,7 @@ D_overall <- cohort_cert %>%
   mutate(n_masked = mask_counts(n)) %>%
   select(-n) 
 
-
+D_overall
 
 # UT Austin ---------------------------------------------------------------
 

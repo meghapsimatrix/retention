@@ -119,13 +119,24 @@ names(sbec_cohort)
 
 table(sbec_cohort$system)
 
+sbec_cohort %>%
+  group_by(IHE, cert_type_cd, cert_pgm_cd) %>%
+  count()
+
 
 sbec_cohort <- sbec_cohort %>%
   filter(system != "Community College") %>% # dropping comm college
-  mutate(IHE = if_else(is.na(org_name), 1, IHE),
-         trad = if_else(IHE == 1 & cert_type_cd == "STD" & cert_pgm_cd %in% c("STD", "PB"), 1, 0))
+  mutate(IHE = if_else(is.na(IHE), 1, IHE),
+         trad = if_else(IHE == 1 & 
+                        cert_type_cd == "STD" & 
+                        cert_pgm_cd %in% c("STD", "PB"), 
+                        1, 0))
 
 table(sbec_cohort$trad)
+
+sbec_cohort %>%
+  group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
+  count()
 
 
 sbec_cohort %>%

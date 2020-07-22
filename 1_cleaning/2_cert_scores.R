@@ -45,5 +45,10 @@ check_nopedag <- semi_join(cert_dat, no_ped, by = "id2")
 
 names(cohort_cert)
 
+cohort_cert %>%
+  group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
+  count()
+
+
 save(cohort_cert, file = "Revised Datasets/R/cohort_cert.RData")
   
