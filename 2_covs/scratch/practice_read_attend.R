@@ -33,20 +33,11 @@ system.time(attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses, ])
 # clean the names of the data and select just the demographic chracteristics that we need
 names(attend_dat) <- tolower(names(attend_dat))
 
-names(attend_dat)
-
-glimpse(attend_dat)
-
-table(attend_dat$economic, useNA = "ifany")
-
-
 attend_dat_clean <- attend_dat %>%
   mutate(economic = case_when(economic == "00" ~ "nd",
                               economic == "01" ~ "free",
                               economic == "02" ~ "reduced",
                               economic == "99" ~ "other"))
-
-table(attend_dat_clean$economic, useNA = "ifany")
 
 
 attend_dat_clean <- attend_dat_clean %>%
@@ -59,11 +50,6 @@ attend_dat_dum <- dummy_cols(attend_dat_clean,
                              select_columns = c('sex', 'ethnic', 'economic'))
 
 
-glimpse(attend_dat_dum)
-
-
-
-# 3000 campuses 
 summary_dat <- attend_dat_dum %>%
   group_by(campus_accnt) %>%
   summarize_at(vars(sex_F:economic_other, bil_esl_attend:title1_flag), mean)

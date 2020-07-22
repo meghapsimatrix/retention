@@ -11,7 +11,7 @@ load("Revised Datasets/R/cohort_ec.RData")
 # Read data ---------------------------------------------------------------
 
 # get to the TEA folder and extract all files with class in it
-files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE) 
+files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)[2:11] 
 # only keep 09-10 to 18-19
 
 # go through each files and read in the data and select particular columns
@@ -33,7 +33,7 @@ summarize_attend_dat <- function(path, type, campuses){
   
   
   attend_dat_clean <- attend_dat_clean %>%
-    select(id2, id1, district, sex, ethnic, economic, 
+    select(id2, id1, district, sex, ethnic, economic, economic_2,
            campus_accnt, bil_esl_attend, gifted_attend, se_attend,
            lep_attend, title1_flag)
   
@@ -52,7 +52,6 @@ summarize_attend_dat <- function(path, type, campuses){
 
 
 # cohort_dat 
-
 camp_dat <- cohort_dat_ec %>%
   select(year, CAMPUS) %>%
   distinct(., .keep_all = TRUE) %>%
