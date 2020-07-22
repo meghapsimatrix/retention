@@ -58,19 +58,15 @@ camp_dat <- cohort_dat_ec %>%
   group_by(year) %>%
   nest(cohort_dat = CAMPUS)
 
-
 files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)
-
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
 params <- tibble(path = files, type = rep(",", 10), cohort_dat = camp_dat$cohort_dat) # need to check 
 
-
-
 # for each file read in the data, create a big data frame of all the datasets together
 attend_dat <- params %>%  # take the params file (with path and type)
   mutate(
-    res = pmap(., .f = read_dat)  # for each line read the data with the right type, and then save it as a compressed data in a column called res
+    res = pmap(., .f = summarize_attend_dat)  # for each line read the data with the right type, and then save it as a compressed data in a column called res
   ) %>%
   unnest(cols = res)# the stuff above nests the datasets in to a row and this function unnests it so we have the full data; data from each year is stacked on top of another
 
