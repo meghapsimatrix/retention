@@ -50,3 +50,7 @@ no_emp_rec %>%
 save(employ_cohort, file = "Revised Datasets/R/employ_cohort.RData")
 
 #demog_emply <- read_csv("NewFilesReleased/TEA/p_demog_employssn10f.txt")
+
+employ_cohort %>%
+  group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
+  count()

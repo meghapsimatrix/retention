@@ -54,6 +54,9 @@ cohort_ec_dat <- cohort_ec_dat %>%
 
 save(cohort_ec_dat, file = "Revised Datasets/R/cohort_ec.RData")
 
+cohort_ec_dat %>%
+  group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
+  count()
 
 cohort_ec_dat %>%
   select(id2, cert_type, cert_field, org_name, org_type, institution_name, year, TENURE, DAYSEMP, EXPER, DISTRICT, CAMPUS, CAMPNAME, ROLE, SERVICE, PBASEPAY) %>%
