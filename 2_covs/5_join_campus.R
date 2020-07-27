@@ -7,6 +7,9 @@ library(tidyverse)
 load("Revised Datasets/R/employ_cohort.RData")
 load("Revised Datasets/R/campus_dat.RData")
 
+campus_dat <- campus_dat %>%
+  filter(year > 10)
+
 
 # Join with the cohort data -----------------------------------------------
 

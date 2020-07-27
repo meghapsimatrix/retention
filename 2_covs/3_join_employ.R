@@ -8,6 +8,12 @@ load("Revised Datasets/R/employ_dat.RData")
 load("Revised Datasets/R/cohort_cert.RData")
 load("Revised Datasets/R/class_dat.RData")
 
+employ_dat <- employ_dat %>%
+  filter(year > 10)
+
+class_dat <- class_dat %>%
+  filter(year > 10)
+
 
 # Join --------------------------------------------------------------------
 
