@@ -27,13 +27,14 @@ table(sbec_dat_full$cert_pgm_cd)
 sbec_dat <- sbec_dat_full %>%
   mutate(cert_effective_dt_clean = mdy_hms(cert_effective_dt),  # transform the effective cert date to date format
          cert_year = year(cert_effective_dt_clean),  # extract year and create a new var cert_year
-         cert_month = month(cert_effective_dt_clean)) %>% # extract month and create cert_month
+         cert_month = month(cert_effective_dt_clean), # extract month and create cert_month
+         cohort_year = if_else(cert_month < 9, cert_year, cert_year + 1)) %>% 
   group_by(id2) %>%
   filter(cert_effective_dt_clean == min(cert_effective_dt_clean)) %>%
   ungroup() %>%
   filter(cert_type_cd %in% c("STD", "INT", "PRO"),   # only keep where std and prob and int and keep where cert_pgm is not HB
          cert_pgm_cd %in% c("ALT", "PB", "STD")) %>%
-  filter(cert_year == 2008 & cert_month > 8 | cert_year == 2009 & cert_month < 9)  # filter to the time frame
+  filter(cohort_year == 2010)  # 09-10
 
 
 nrow(sbec_dat)
