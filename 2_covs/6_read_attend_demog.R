@@ -41,10 +41,16 @@ summarize_attend_dat <- function(path, type, campuses){
   attend_dat_dum <- dummy_cols(attend_dat_clean, 
                                select_columns = c('sex', 'ethnic', 'economic'))
   
+  num_students <- attend_dat_dum %>%
+    group_by(campus_accnt) %>%
+    summarize(n = n_distinct(id2)) %>%
+    ungroup()
+  
   summary_dat <- attend_dat_dum %>%
     group_by(campus_accnt) %>%
     summarize_at(vars(sex_F:economic_other, bil_esl_attend:title1_flag), mean) %>%
-    ungroup()
+    ungroup() %>%
+    left_join(num_students, by = "campus_accnt")
   
   return(summary_dat)
   
