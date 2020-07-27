@@ -34,7 +34,7 @@ sbec_dat <- sbec_dat_full %>%
   ungroup() %>%
   filter(cert_type_cd %in% c("STD", "INT", "PRO"),   # only keep where std and prob and int and keep where cert_pgm is not HB
          cert_pgm_cd %in% c("ALT", "PB", "STD")) %>%
-  filter(cohort_year == 2010)  # 09-10
+  filter(cohort_year == 2010)  # sept 09- aug 10
 
 
 nrow(sbec_dat)
