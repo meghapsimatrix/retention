@@ -33,7 +33,7 @@ sbec_dat <- sbec_dat_full %>%
   ungroup() %>%
   filter(cert_type_cd %in% c("STD", "INT", "PRO"),   # only keep where std and prob and int and keep where cert_pgm is not HB
          cert_pgm_cd %in% c("ALT", "PB", "STD")) %>%
-  filter(cert_year == 2009 | cert_year == 2010 & cert_month < 6)  # filter to the time frame
+  filter(cert_year == 2008 & cert_month > 8 | cert_year == 2009 & cert_month < 9)  # filter to the time frame
 
 
 nrow(sbec_dat)
