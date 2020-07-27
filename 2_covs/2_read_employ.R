@@ -11,7 +11,7 @@ library(purrr)
 # Read data ---------------------------------------------------------------
 
 # get to the TEA folder and extract all files with class in it
-files <- list.files("NewFilesReleased/TEA", pattern = "p_employ", full.names = TRUE)[11:20]
+files <- list.files("NewFilesReleased/TEA", pattern = "p_employ", full.names = TRUE)[12:20]
 
 # go through each files and read in the data and select particular columns
 read_dat <- function(path, type){
@@ -23,7 +23,7 @@ read_dat <- function(path, type){
 }
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c(",", rep("\t", 9)))
+params <- tibble(path = files, type = c(rep("\t", 9)))
 
 
 # for each file read in the data, create a big data frame of all the datasets together

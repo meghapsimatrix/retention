@@ -5,7 +5,7 @@ library(tidyverse)
 
 # get to the TEA folder and extract all files with class in it
 files <- list.files("NewFilesReleased/TEA", pattern = "p_campus", full.names = TRUE)
-files <- files[!str_detect(files, "f")][10:19]
+files <- files[!str_detect(files, "f")][11:19]
 
 # go through each files and read in the data and select particular columns
 read_dat <- function(path, type){
@@ -17,7 +17,7 @@ read_dat <- function(path, type){
 }
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c( rep("\t", 9), ","))
+params <- tibble(path = files, type = c(rep("\t", 8), ","))
 
 
 # for each file read in the data, create a big data frame of all the datasets together

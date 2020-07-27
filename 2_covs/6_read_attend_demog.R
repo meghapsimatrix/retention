@@ -11,7 +11,7 @@ load("Revised Datasets/R/cohort_ec.RData")
 # Read data ---------------------------------------------------------------
 
 # get to the TEA folder and extract all files with class in it
-files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)[2:11] 
+files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)[3:11] 
 # only keep 09-10 to 18-19
 
 # go through each files and read in the data and select particular columns
