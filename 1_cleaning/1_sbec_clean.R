@@ -37,6 +37,7 @@ sbec_dat <- sbec_dat_full %>%
 
 
 nrow(sbec_dat)
+table(sbec_dat$cert_year, sbec_dat$cert_month)
 
 
 # check tables
