@@ -10,6 +10,8 @@ load("Revised Datasets/R/campus_dat.RData")
 campus_dat <- campus_dat %>%
   filter(year > 10)
 
+table(employ_cohort$cert_year, employ_co)
+
 
 # Join with the cohort data -----------------------------------------------
 
@@ -68,4 +70,7 @@ cohort_ec_dat %>%
   View()
 
 load("Revised Datasets/R/cohort_ec.RData")
+
+table(cohort_ec_dat$cert_year, cohort_ec_dat$cert_month)
+table(cohort_ec_dat$year)
 

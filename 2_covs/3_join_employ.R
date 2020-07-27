@@ -14,6 +14,7 @@ employ_dat <- employ_dat %>%
 class_dat <- class_dat %>%
   filter(year > 10)
 
+table(cohort_cert$cert_year, cohort_cert$cert_month)
 
 # Join --------------------------------------------------------------------
 
