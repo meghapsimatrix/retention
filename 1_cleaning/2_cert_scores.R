@@ -9,6 +9,8 @@ load("Revised Datasets/R/sbec_cohort.RData")
 
 names(sbec_cohort)
 
+table(sbec_cohort$cert_year, sbec_cohort$cert_month)
+
 # Join data ---------------------------------------------------------------
 
 cohort_cert <- left_join(sbec_cohort, cert_dat, by = "id2")  %>% # join the clean cohort data to the certification data raw - it will only keep records thatmatch with the cohort
@@ -49,6 +51,7 @@ cohort_cert %>%
   group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
   count()
 
+table(cohort_cert$cert_year, cohort_cert$cert_month)
 
 save(cohort_cert, file = "Revised Datasets/R/cohort_cert.RData")
   

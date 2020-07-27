@@ -10,7 +10,7 @@ load("Revised Datasets/R/campus_dat.RData")
 campus_dat <- campus_dat %>%
   filter(year > 10)
 
-table(employ_cohort$cert_year, employ_co)
+table(employ_cohort$cert_year, employ_cohort$cert_month)
 
 
 # Join with the cohort data -----------------------------------------------
@@ -57,7 +57,12 @@ table(cohort_ec_dat$DEGREE, useNA = "ifany")
 cohort_ec_dat <- cohort_ec_dat %>%
   distinct(., .keep_all = TRUE)
 
+
+table(cohort_ec_dat$cert_year, cohort_ec_dat$cert_month)
+
 save(cohort_ec_dat, file = "Revised Datasets/R/cohort_ec.RData")
+
+table(cohort_ec_dat$year)
 
 cohort_ec_dat %>%
   group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%

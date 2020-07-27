@@ -18,7 +18,7 @@ read_dat <- function(path, type){
 }
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = c(rep("\t", 9)))
+params <- tibble(path = files, type = c(",", rep("\t", 9)))
 
 
 # for each file read in the data, create a big data frame of all the datasets together

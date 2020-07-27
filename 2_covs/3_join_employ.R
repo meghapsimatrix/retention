@@ -53,6 +53,10 @@ no_emp_rec %>%
  # select(id2, gender, ethnicity, cert_pgm, cert_field, city, test_descr, scorenum) %>%
   View()
 
+
+table(employ_cohort$cert_year, employ_cohort$cert_month)
+
+
 # save the data
 save(employ_cohort, file = "Revised Datasets/R/employ_cohort.RData")
 
