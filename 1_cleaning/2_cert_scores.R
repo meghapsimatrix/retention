@@ -52,6 +52,7 @@ cohort_cert %>%
   count()
 
 table(cohort_cert$cert_year, cohort_cert$cert_month)
+table(cohort_cert$system)
 
 save(cohort_cert, file = "Revised Datasets/R/cohort_cert.RData")
   

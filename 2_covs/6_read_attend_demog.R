@@ -12,7 +12,8 @@ load("Revised Datasets/R/cohort_ec.RData")
 
 # get to the TEA folder and extract all files with class in it
 files <- list.files("NewFilesReleased/TEA", pattern = "p_attend_demog", full.names = TRUE)[3:11] 
-# only keep 09-10 to 18-19
+# only keep 10-11 to 18-19
+files
 
 # go through each files and read in the data and select particular columns
 summarize_attend_dat <- function(path, type, campuses){
@@ -72,7 +73,7 @@ dim(camp_dat)
 length(files)
 
 # create a tibble (modern data frame) with path and separator (comma or tab)
-params <- tibble(path = files, type = rep(",", 10), cohort_dat = camp_dat$data) # need to check 
+params <- tibble(path = files, type = c(rep("\t", 8), ","), campuses = camp_dat$data) # need to check 
 params
 
 # for each file read in the data, create a big data frame of all the datasets together
@@ -90,3 +91,6 @@ attend_dat <- attend_dat %>%
 
 
 save(attend_dat, file = "Revised Datasets/R/cohort_final.RData")
+
+
+

@@ -162,5 +162,8 @@ table(dups_check$cycle)
 nrow(sbec_cohort)
 names(sbec_cohort)
 
+table(sbec_cohort$cert_year, sbec_cohort$cert_month)
+table(sbec_cohort$system)
+
 # Save the data -----------------------------------------------------------
 save(sbec_cohort, file = "Revised Datasets/R/sbec_cohort.RData")

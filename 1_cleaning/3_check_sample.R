@@ -8,6 +8,8 @@ source("CodeToArchive/Megha/analysis/masking/Masking-functions.R")
 
 table(cohort_cert$trad, useNA = "ifany")
 table(cohort_cert$system, useNA = "ifany")
+table(cohort_cert$cert_type_cd)
+table(cohort_cert$cert_pgm_cd)
 
 corhot_cert <- cohort_cert %>%
   mutate(D = if_else(trad == 1, "Traditional", "Alternative"))
@@ -56,11 +58,9 @@ D_overall
 
 ut_austin <- cohort_cert %>%
   filter(org_name == "UNIVERSITY OF TEXAS - AUSTIN") %>%
-  summarize(n = n()) %>%
-  mutate(n_masked = mask_counts(n)) %>%
-  select(-n) 
+  summarize(n = n()) 
 
-
+ut_austin
 
 # Write csv ---------------------------------------------------------------
 

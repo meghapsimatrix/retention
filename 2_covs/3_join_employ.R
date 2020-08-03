@@ -55,6 +55,8 @@ no_emp_rec %>%
 
 
 table(employ_cohort$cert_year, employ_cohort$cert_month)
+table(employ_cohort$system)
+table(employ_cohort$year)
 
 
 # save the data

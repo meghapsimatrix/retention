@@ -59,10 +59,12 @@ cohort_ec_dat <- cohort_ec_dat %>%
 
 
 table(cohort_ec_dat$cert_year, cohort_ec_dat$cert_month)
+table(cohort_ec_dat$system)
+table(cohort_ec_dat$year)
+
 
 save(cohort_ec_dat, file = "Revised Datasets/R/cohort_ec.RData")
 
-table(cohort_ec_dat$year)
 
 cohort_ec_dat %>%
   group_by(trad, IHE, cert_type_cd, cert_pgm_cd) %>%
@@ -78,4 +80,5 @@ load("Revised Datasets/R/cohort_ec.RData")
 
 table(cohort_ec_dat$cert_year, cohort_ec_dat$cert_month)
 table(cohort_ec_dat$year)
+table(cohort_ec_dat$system)
 
