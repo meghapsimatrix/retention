@@ -5,9 +5,9 @@ library(tidyverse)
 # Read data ---------------------------------------------------------------
 
 # get to the TEA folder and extract all files with class in it 
-# check if 11:20 includes the years 10 to 19 !!! check files see if it includes all
-files <- list.files("NewFilesReleased/TEA", pattern = "p_nonclass", full.names = TRUE)[3:11]
-
+# check if 11:19includes the years 10 to 19 !!! check files see if it includes all
+files <- list.files("NewFilesReleased/TEA", pattern = "p_nonclass", full.names = TRUE)[2:11]
+files
 # go through each files and read in the data and select particular columns
 read_dat <- function(path, type){
   

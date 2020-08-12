@@ -51,6 +51,7 @@ summarize_attend_dat <- function(path, type, campuses){
   
   summary_dat <- attend_dat_dum %>%
     group_by(campus_accnt) %>%
+    distinct(id2, .keep_all = TRUE) %>%  # there will be only one or two people duplicated in each campus per year so prob won't matter
     summarize_at(vars(sex_F:economic_other, bil_esl_attend:title1_flag), mean) %>%
     ungroup() %>%
     left_join(num_students, by = "campus_accnt")
@@ -91,6 +92,15 @@ attend_dat <- params %>%  # take the params file (with path and type)
 attend_dat <- attend_dat %>%
   mutate(year = parse_number(path)) 
 
+glimpse(attend_dat)
+table(attend_dat$year) # 11 - 19
+
+table(is.na(attend_dat$sex_F))
+table(is.na(attend_dat$ethnic_W))
+table(is.na(attend_dat$ethnic_H))
+table(is.na(attend_dat$ethnic_B))
+table(is.na(attend_dat$economic_free))
+table(is.na(attend_dat$economic_reduced))
 
 save(attend_dat, file = "Revised Datasets/R/attend_dat.RData")
 
