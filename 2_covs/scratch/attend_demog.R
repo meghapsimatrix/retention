@@ -1,14 +1,17 @@
-path <- params %>% pull(path)[1]
+path <- "NewFilesReleased/TEA/p_attend_demog11.txt"
 type <- "/t"
+
 campuses <- params %>%
-  filter(year == 11) %>%
-  pull(campuses)
+  filter(path == "NewFilesReleased/TEA/p_attend_demog11.txt") %>%
+  unnest(campuses) 
+
+
 
 dm <- detect_dm_csv(path, sep = type, header = TRUE, row.names = NULL)
 dm$columns[, "type"] <- "string"
 dat <- laf_open(dm, skip = 1)
 
-attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses, ]
+attend_dat <- dat[dat$CAMPUS_ACCNT[] %in% campuses$CAMPUS, ]
 
 names(attend_dat) <- tolower(names(attend_dat))
 
@@ -38,3 +41,10 @@ summary_dat <- attend_dat_dum %>%
   summarize_at(vars(sex_F:economic_other, bil_esl_attend:title1_flag), mean) %>%
   ungroup() %>%
   left_join(num_students, by = "campus_accnt")
+
+
+glimpse(attend_dat)
+
+head(dat)
+
+campuses
