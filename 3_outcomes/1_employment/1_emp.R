@@ -1,8 +1,4 @@
 library(tidyverse)
-#library(survival)
-library(ggfortify)
-#library(survminer)
-library(stringr)
 library(estimatr)
 library(broom)
 
@@ -15,7 +11,7 @@ glimpse(cohort_ec_dat)
 
 
 covariates <- cohort_ec_dat %>%
-  select(id2, gender, ethnicity, org_name, org_type, cert_type, cert_field, cert_field_group, degree_cd) %>%
+  select(id2, trad, system, org_name, gender, ethnicity, degree_cd) %>%
   distinct(., .keep_all = TRUE)
  
 
@@ -24,10 +20,8 @@ year_dat <- cohort_ec_dat %>%
   select(id2, year) %>%
   distinct(., .keep_all = TRUE) %>%
   mutate(status = ifelse(!is.na(year), 1, 0)) %>%  
-  spread(year, status, fill = 0) %>% # 1 is censored 2 is not employed anymore
-  select(1:11) %>%
-  gather(year, status, -1) %>%
-  mutate(year = as.numeric(year))
+  spread(year, status, fill = 0) %>% 
+  gather(year, status, -1) 
 
 table(year_dat$year)
 
@@ -42,52 +36,53 @@ year_dat %>%
   count()
 
 
-
 analyze_dat <- left_join(year_dat, covariates) %>%
-  filter(year %in% c(10, 12, 14, 19)) %>%
+  filter(year %in% c(11, 13, 15, 19)) %>%
   group_by(year) %>%
-  mutate(org_name = factor(org_name),
-         org_name = fct_lump_min(org_name, min = 40)) %>%
   ungroup() %>%
-  filter()
-
-table(analyze_dat$org_name)
+  rename(comp = trad)
 
 
 
-# Linear Probability  -----------------------------------------------------
+# Traditional vs alt ------------------------------------------------------
 
-estimate_fe <- function(dat){
+
+estimate_ate <- function(equation = "status ~ comp + gender + ethnicity + degree_cd", dat){
   
-  mod <- lm_robust(status ~ 0 + org_name + org_type + gender + ethnicity + cert_field + degree_cd, data = dat, se_type = "HC0")
+  mod <- lm_robust(as.formula(equation), data = dat)
   
   tidy(mod) %>%
-    filter(str_detect(term, "org_name"))
+    filter(str_detect(term, "comp"))
 }
   
 
-# estimate_fe <- function(dat){
-#   
-#   mod <- lm_robust(status ~ 0 + org_name, data = dat, se_type = "HC0")
-#   
-#   tidy(mod) %>%
-#     filter(str_detect(term, "org_name"))
-# }
-
-
 res <- analyze_dat %>%
-  #ungroup() %>%
   group_by(year) %>%
-  do(estimate_fe(.)) %>%
-  ungroup() %>%
-  filter(str_detect(term, "UNIVERSITY OF TEXAS - AUSTIN"))
+  do(estimate_ate(.)) %>%
+  ungroup() 
 
-
-# coxph(Surv(year, status) ~ gender + ethnicity + org_name, data = analyze_dat)
+# descriptive stats
 
 analyze_dat %>%
   group_by(year, org_name) %>%
   summarize(n = n(),
             p = mean(status)) %>%
-  ungroup() %>%
-  filter(org_name == "UNIVERSITY OF TEXAS - AUSTIN")
+  ungroup()
+
+
+
+# UT Austin vs  -----------------------------------------------------------
+
+analyze_dat_ut <- analyze_dat %>%
+  mutate(comp = case_when(org_name == "UNIVERSITY OF TEXAS - AUSTIN", "UT Austin",
+                             TRUE ~ system),
+         comp = factor(comp),
+         comp = relevel(comp, ref = "UT Austin")) %>%
+  filter(!(comp %in% c("ALT", "Community College", "Other"))) 
+
+
+res_ut <- analyze_dat_ut %>%
+  group_by(year) %>%
+  do(estimate_ate(.)) %>%
+  ungroup() 
+
