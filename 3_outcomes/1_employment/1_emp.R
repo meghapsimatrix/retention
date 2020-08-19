@@ -49,7 +49,7 @@ analyze_dat <- left_join(year_dat, covariates) %>%
 
 estimate_ate <- function(equation = "status ~ comp + gender + ethnicity + degree_cd", dat){
   
-  mod <- lm_robust(as.formula(equation), data = dat)
+  mod <- lm_robust(as.formula(equation), data = dat, clusters = org_name)
   
   tidy(mod) %>%
     filter(str_detect(term, "comp"))
