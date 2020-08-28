@@ -51,8 +51,8 @@ analyze_dat <- left_join(year_dat, covariates) %>%
 table(analyze_dat$year)
 table(analyze_dat$status)
 
-emp_dat <- left_join(year_dat, covariates) 
-save(emp_dat, file = "Revised Datasets/R/emp_dat.RData")
+emp_yrs_dat <- left_join(year_dat, covariates) 
+save(emp_yrs_dat, file = "Revised Datasets/R/emp_yrs_dat.RData")
 
 
 # Traditional vs alt ------------------------------------------------------

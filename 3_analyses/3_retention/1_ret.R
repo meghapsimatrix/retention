@@ -4,7 +4,7 @@ library(survminer)
 library(coxphw)
 
 
-load("Revised Datasets/R/emp_dat.RData")
+load("Revised Datasets/R/emp_yrs_dat.RData")
 
 emp_dat <- emp_dat %>%
   mutate(event = ifelse(status == 1, 0, 1)) %>%
