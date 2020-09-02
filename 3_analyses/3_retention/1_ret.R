@@ -67,6 +67,15 @@ all_dat <- bind_rows(quit, emp) %>%
   ungroup() %>%
   rename(D = trad)
 
+mutate_dat <- all_dat %>%
+  filter(duplicated(id2)) %>%
+  mutate(time1 = time1 - 1)
+
+all_dat <- all_dat %>%
+  filter(!duplicated(id2)) %>%
+  bind_rows(mutate_dat) %>%
+  arrange(id2)
+
 
 load("Revised Datasets/R/cohort_ec.RData")
 
